@@ -53,12 +53,6 @@ rocket2026/
 
 * Java 21 ☕
 * Spring Boot 3.2
-* Spring Web (API REST)
-* Spring Data JPA + Hibernate
-* H2 Database (banco em memória)
-* Bean Validation
-* Lombok
-* Apache Maven
 * HTML + CSS + JavaScript
 
 ---
