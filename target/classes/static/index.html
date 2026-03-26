@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Project Rocket 2026</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0b0f1a;
+            color: #e0e6f0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f1e3a, #1a2f52);
+            padding: 20px 32px;
+            border-bottom: 1px solid #1e3a5f;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header h1 { font-size: 22px; font-weight: 600; color: #7eb8f7; }
+        header p  { font-size: 13px; color: #7a90aa; margin-top: 2px; }
+
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 6px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 220px 1fr 320px;
+            gap: 0;
+            height: calc(100vh - 73px);
+        }
+
+        /* ---- SIDEBAR ---- */
+        .sidebar {
+            background: #0d1525;
+            border-right: 1px solid #1e3a5f;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section { padding: 8px 16px 4px; font-size: 10px; color: #4a6080; text-transform: uppercase; letter-spacing: .08em; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #7a90aa;
+            transition: background .15s, color .15s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover { background: #111f36; color: #e0e6f0; }
+        .nav-item.active { background: #111f36; color: #7eb8f7; border-left-color: #7eb8f7; }
+        .nav-icon { font-size: 16px; }
+
+        /* ---- MAIN ---- */
+        .main { overflow-y: auto; padding: 24px; }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        h2 { font-size: 18px; font-weight: 600; color: #7eb8f7; margin-bottom: 4px; }
+        .page-desc { font-size: 13px; color: #4a6080; margin-bottom: 20px; }
+
+        /* Cards */
+        .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+        .card {
+            background: #0f1e3a;
+            border: 1px solid #1e3a5f;
+            border-radius: 10px;
+            padding: 16px;
+            transition: border-color .2s;
+        }
+
+        .card:hover { border-color: #2a5a8f; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .card-name { font-weight: 600; font-size: 15px; }
+
+        .badge {
+            font-size: 10px; font-weight: 600; padding: 3px 8px;
+            border-radius: 20px; text-transform: uppercase;
+        }
+
+        .badge-pronto     { background: #0f2e1a; color: #22c55e; border: 1px solid #166534; }
+        .badge-lancado    { background: #1a2a5f; color: #7eb8f7; border: 1px solid #1e40af; }
+        .badge-falha      { background: #3b0f0f; color: #f87171; border: 1px solid #991b1b; }
+        .badge-solo       { background: #1c1a0f; color: #fbbf24; border: 1px solid #92400e; }
+        .badge-espaco     { background: #1a1a2e; color: #a78bfa; border: 1px solid #5b21b6; }
+        .badge-orbita     { background: #0f2e28; color: #34d399; border: 1px solid #065f46; }
+        .badge-ativo      { background: #0f2e1a; color: #22c55e; border: 1px solid #166534; }
+
+        .card-row { display: flex; justify-content: space-between; font-size: 12px; color: #4a6080; padding: 4px 0; border-bottom: 1px solid #1a2a40; }
+        .card-row:last-child { border-bottom: none; }
+        .card-row span:last-child { color: #c0cfe0; }
+
+        .fuel-bar { height: 4px; background: #1e3a5f; border-radius: 2px; margin: 8px 0; }
+        .fuel-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #2563eb, #7eb8f7); transition: width .4s; }
+
+        /* Forms */
+        .form-card {
+            background: #0f1e3a;
+            border: 1px solid #1e3a5f;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 520px;
+            margin-bottom: 20px;
+        }
+
+        .form-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; color: #c0cfe0; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: #4a6080; margin-bottom: 4px; }
+
+        input, select {
+            width: 100%;
+            background: #0b0f1a;
+            border: 1px solid #1e3a5f;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: #e0e6f0;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        input:focus, select:focus { border-color: #2563eb; }
+
+        select option { background: #0b0f1a; }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .15s, transform .1s;
+        }
+
+        .btn:hover { opacity: .85; }
+        .btn:active { transform: scale(.97); }
+
+        .btn-primary { background: #2563eb; color: #fff; }
+        .btn-success { background: #16a34a; color: #fff; }
+        .btn-warning { background: #d97706; color: #fff; }
+        .btn-danger  { background: #dc2626; color: #fff; }
+
+        /* ---- LOG PANEL ---- */
+        .log-panel {
+            background: #070d18;
+            border-left: 1px solid #1e3a5f;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .log-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #1e3a5f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-header span { font-size: 12px; color: #4a6080; }
+        .log-clear { background: none; border: 1px solid #1e3a5f; color: #4a6080; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+        .log-clear:hover { color: #e0e6f0; border-color: #2a5a8f; }
+
+        .log-body { flex: 1; overflow-y: auto; padding: 12px; font-family: 'Courier New', monospace; font-size: 12px; }
+
+        .log-entry { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #0f1a2e; }
+        .log-time { color: #2563eb; font-size: 10px; margin-bottom: 2px; }
+        .log-type { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-bottom: 4px; }
+        .log-ok   { background: #0f2e1a; color: #22c55e; }
+        .log-err  { background: #3b0f0f; color: #f87171; }
+        .log-info { background: #1a2a5f; color: #7eb8f7; }
+        .log-msg { color: #7a90aa; line-height: 1.5; word-break: break-all; }
+        .log-json { color: #34d399; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; margin-top: 4px; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: #2a3a4f; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="status-dot" id="statusDot"></div>
+    <div>
+        <h1>🚀 Project Rocket 2026</h1>
+        <p>Centro de Controle Espacial — Spring Boot API</p>
+    </div>
+</header>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-section">Monitoramento</div>
+        <div class="nav-item active" onclick="showPage('status')">
+            <span class="nav-icon">📡</span> Status Geral
+        </div>
+
+        <div class="sidebar-section">Foguetes</div>
+        <div class="nav-item" onclick="showPage('foguetes')">
+            <span class="nav-icon">🚀</span> Listar Foguetes
+        </div>
+        <div class="nav-item" onclick="showPage('criar-foguete')">
+            <span class="nav-icon">➕</span> Novo Foguete
+        </div>
+        <div class="nav-item" onclick="showPage('abastecer')">
+            <span class="nav-icon">⛽</span> Abastecer
+        </div>
+
+        <div class="sidebar-section">Satélites</div>
+        <div class="nav-item" onclick="showPage('satelites')">
+            <span class="nav-icon">🛰</span> Listar Satélites
+        </div>
+        <div class="nav-item" onclick="showPage('criar-satelite')">
+            <span class="nav-icon">➕</span> Novo Satélite
+        </div>
+        <div class="nav-item" onclick="showPage('operacoes')">
+            <span class="nav-icon">🎮</span> Operações
+        </div>
+
+        <div class="sidebar-section">Missões</div>
+        <div class="nav-item" onclick="showPage('missao')">
+            <span class="nav-icon">🌌</span> Iniciar Missão
+        </div>
+        <div class="nav-item" onclick="showPage('dados')">
+            <span class="nav-icon">📤</span> Enviar Dados
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- STATUS GERAL -->
+        <div class="page active" id="page-status">
+            <h2>📡 Status Geral</h2>
+            <p class="page-desc">Visão completa de todos os foguetes e satélites registrados.</p>
+            <button class="btn btn-primary" onclick="loadStatus()" style="margin-bottom:16px">🔄 Atualizar</button>
+            <div id="status-content">
+                <div class="empty-state">Clique em Atualizar para carregar</div>
+            </div>
+        </div>
+
+        <!-- FOGUETES -->
+        <div class="page" id="page-foguetes">
+            <h2>🚀 Foguetes</h2>
+            <p class="page-desc">Lista de todos os foguetes cadastrados.</p>
+            <button class="btn btn-primary" onclick="loadFoguetes()" style="margin-bottom:16px">🔄 Carregar</button>
+            <div id="foguetes-content">
+                <div class="empty-state">Clique em Carregar</div>
+            </div>
+        </div>
+
+        <!-- CRIAR FOGUETE -->
+        <div class="page" id="page-criar-foguete">
+            <h2>➕ Novo Foguete</h2>
+            <p class="page-desc">Cadastra um novo foguete no sistema.</p>
+            <div class="form-card">
+                <h3>Dados do Foguete</h3>
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input id="f-nome" type="text" placeholder="Ex: Saturn V">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Carga Máxima (kg)</label>
+                        <input id="f-carga" type="number" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label>Combustível (ton)</label>
+                        <input id="f-comb" type="number" placeholder="100">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="criarFoguete()">Cadastrar Foguete</button>
+            </div>
+        </div>
+
+        <!-- ABASTECER -->
+        <div class="page" id="page-abastecer">
+            <h2>⛽ Abastecer Foguete</h2>
+            <p class="page-desc">Adiciona combustível a um foguete existente.</p>
+            <div class="form-card">
+                <h3>Abastecimento</h3>
+                <div class="form-group">
+                    <label>Nome do Foguete</label>
+                    <input id="ab-nome" type="text" placeholder="Ex: Falcon XII">
+                </div>
+                <div class="form-group">
+                    <label>Quantidade (toneladas)</label>
+                    <input id="ab-qtd" type="number" placeholder="50">
+                </div>
+                <button class="btn btn-warning" onclick="abastecerFoguete()">⛽ Abastecer</button>
+            </div>
+        </div>
+
+        <!-- SATELITES -->
+        <div class="page" id="page-satelites">
+            <h2>🛰 Satélites</h2>
+            <p class="page-desc">Lista de todos os satélites cadastrados.</p>
+            <button class="btn btn-primary" onclick="loadSatelites()" style="margin-bottom:16px">🔄 Carregar</button>
+            <div id="satelites-content">
+                <div class="empty-state">Clique em Carregar</div>
+            </div>
+        </div>
+
+        <!-- CRIAR SATELITE -->
+        <div class="page" id="page-criar-satelite">
+            <h2>➕ Novo Satélite</h2>
+            <p class="page-desc">Cadastra um novo satélite no sistema.</p>
+            <div class="form-card">
+                <h3>Dados do Satélite</h3>
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input id="s-nome" type="text" placeholder="Ex: Voyager III">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Massa (kg)</label>
+                        <input id="s-massa" type="number" placeholder="300">
+                    </div>
+                    <div class="form-group">
+                        <label>Energia inicial</label>
+                        <input id="s-energia" type="number" placeholder="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Órbita Alvo</label>
+                    <input id="s-orbita" type="text" placeholder="GEO">
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="s-tipo">
+                        <option value="CIENTIFICO">Científico</option>
+                        <option value="COMUNICACAO">Comunicação</option>
+                        <option value="ESPIONAGEM">Espionagem</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" onclick="criarSatelite()">Cadastrar Satélite</button>
+            </div>
+        </div>
+
+        <!-- OPERAÇÕES -->
+        <div class="page" id="page-operacoes">
+            <h2>🎮 Operações do Satélite</h2>
+            <p class="page-desc">Controle individual de cada satélite.</p>
+            <div class="form-card">
+                <h3>Ativar Painéis Solares</h3>
+                <div class="form-group">
+                    <label>Nome do Satélite</label>
+                    <input id="op-paineis-nome" type="text" placeholder="Ex: Hubble">
+                </div>
+                <button class="btn btn-warning" onclick="ativarPaineis()">☀ Ativar Painéis</button>
+            </div>
+            <div class="form-card">
+                <h3>Definir Órbita</h3>
+                <div class="form-group">
+                    <label>Nome do Satélite</label>
+                    <input id="op-orbita-nome" type="text" placeholder="Ex: Hubble">
+                </div>
+                <div class="form-group">
+                    <label>Órbita</label>
+                    <select id="op-orbita-escolha">
+                        <option value="1">1 — LEO (Baixa)</option>
+                        <option value="2">2 — GEO (Geoestacionária)</option>
+                        <option value="3">3 — Órbita Lunar</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="definirOrbita()">🌍 Definir Órbita</button>
+            </div>
+            <div class="form-card">
+                <h3>Ativar Satélite</h3>
+                <div class="form-group">
+                    <label>Nome do Satélite</label>
+                    <input id="op-ativar-nome" type="text" placeholder="Ex: Hubble">
+                </div>
+                <button class="btn btn-success" onclick="ativarSatelite()">🛰 Ativar Satélite</button>
+            </div>
+        </div>
+
+        <!-- MISSÃO -->
+        <div class="page" id="page-missao">
+            <h2>🌌 Iniciar Missão</h2>
+            <p class="page-desc">Carrega o satélite no foguete e realiza o lançamento.</p>
+            <div class="form-card">
+                <h3>Parâmetros da Missão</h3>
+                <div class="form-group">
+                    <label>Nome do Foguete</label>
+                    <input id="m-foguete" type="text" placeholder="Ex: Falcon XII">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Satélite</label>
+                    <input id="m-satelite" type="text" placeholder="Ex: Hubble">
+                </div>
+                <button class="btn btn-danger" onclick="iniciarMissao()">🚀 Lançar Missão</button>
+            </div>
+        </div>
+
+        <!-- ENVIAR DADOS -->
+        <div class="page" id="page-dados">
+            <h2>📤 Enviar Dados</h2>
+            <p class="page-desc">Faz o satélite enviar sua mensagem (consome energia).</p>
+            <div class="form-card">
+                <h3>Transmissão</h3>
+                <div class="form-group">
+                    <label>Nome do Satélite</label>
+                    <input id="d-nome" type="text" placeholder="Ex: Hubble">
+                </div>
+                <button class="btn btn-primary" onclick="enviarDados()">📡 Enviar Dados</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- LOG PANEL -->
+    <aside class="log-panel">
+        <div class="log-header">
+            <span>📋 Log de Operações</span>
+            <button class="log-clear" onclick="clearLog()">Limpar</button>
+        </div>
+        <div class="log-body" id="logBody">
+            <div class="empty-state">Aguardando operações...</div>
+        </div>
+    </aside>
+</div>
+
+<script>
+    const API = 'http://localhost:8080/api';
+    let logEntries = [];
+
+    // ---- Navegação ----
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('page-' + id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // ---- Log ----
+    function log(type, title, data) {
+        const body = document.getElementById('logBody');
+        const now = new Date().toLocaleTimeString('pt-BR');
+        const typeClass = type === 'ok' ? 'log-ok' : type === 'err' ? 'log-err' : 'log-info';
+        const typeLabel = type === 'ok' ? 'OK' : type === 'err' ? 'ERRO' : 'INFO';
+
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.innerHTML = `
+            <div class="log-time">${now}</div>
+            <span class="log-type ${typeClass}">${typeLabel}</span>
+            <div class="log-msg">${title}</div>
+            ${data ? `<div class="log-json">${JSON.stringify(data, null, 2)}</div>` : ''}
+        `;
+
+        if (body.querySelector('.empty-state')) body.innerHTML = '';
+        body.prepend(entry);
+    }
+
+    function clearLog() {
+        document.getElementById('logBody').innerHTML = '<div class="empty-state">Log limpo.</div>';
+    }
+
+    // ---- Helpers ----
+    async function call(method, path, body) {
+        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(API + path, opts);
+        const data = await res.json();
+        if (!res.ok) throw { status: res.status, ...data };
+        return data;
+    }
+
+    function badgeStatus(status) {
+        const map = {
+            'Pronto': 'badge-pronto', 'Lançado': 'badge-lancado', 'Falha': 'badge-falha',
+            'Em solo': 'badge-solo', 'No espaço': 'badge-espaco',
+            'Em órbita': 'badge-orbita', 'Ativo': 'badge-ativo'
+        };
+        return `<span class="badge ${map[status] || 'badge-info'}">${status}</span>`;
+    }
+
+    function fuelBar(val, max = 150) {
+        const pct = Math.min(100, (val / max) * 100);
+        return `<div class="fuel-bar"><div class="fuel-fill" style="width:${pct}%"></div></div>`;
+    }
+
+    // ---- Foguetes ----
+    async function loadFoguetes() {
+        try {
+            const data = await call('GET', '/foguetes');
+            renderFoguetes(data, 'foguetes-content');
+            log('ok', `${data.length} foguete(s) carregado(s)`);
+        } catch(e) { log('err', 'Erro ao carregar foguetes', e); }
+    }
+
+    function renderFoguetes(list, containerId) {
+        const el = document.getElementById(containerId);
+        if (!list.length) { el.innerHTML = '<div class="empty-state">Nenhum foguete encontrado</div>'; return; }
+        el.innerHTML = `<div class="cards">${list.map(f => `
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-name">🚀 ${f.nome}</span>
+                    ${badgeStatus(f.status)}
+                </div>
+                ${fuelBar(f.combustivelRestante)}
+                <div class="card-row"><span>Combustível</span><span>${f.combustivelRestante} ton</span></div>
+                <div class="card-row"><span>Carga máxima</span><span>${f.cargaMaxima} kg</span></div>
+                <div class="card-row"><span>Satélite</span><span>${f.sateliteCarregado || '—'}</span></div>
+            </div>`).join('')}</div>`;
+    }
+
+    async function criarFoguete() {
+        const nome = document.getElementById('f-nome').value.trim();
+        const cargaMaxima = parseFloat(document.getElementById('f-carga').value);
+        const combustivelRestante = parseFloat(document.getElementById('f-comb').value);
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('POST', '/foguetes', { nome, cargaMaxima, combustivelRestante });
+            log('ok', `Foguete "${data.nome}" criado com sucesso!`, data);
+            document.getElementById('f-nome').value = '';
+        } catch(e) { log('err', e.mensagem || 'Erro ao criar foguete', e); }
+    }
+
+    async function abastecerFoguete() {
+        const nome = document.getElementById('ab-nome').value.trim();
+        const quantidade = parseFloat(document.getElementById('ab-qtd').value);
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('PUT', `/foguetes/${nome}/abastecer`, { quantidade });
+            log('ok', `${nome} abastecido! Combustível: ${data.combustivelRestante} ton`, data);
+        } catch(e) { log('err', e.mensagem || 'Erro ao abastecer', e); }
+    }
+
+    // ---- Satélites ----
+    async function loadSatelites() {
+        try {
+            const data = await call('GET', '/satelites');
+            renderSatelites(data, 'satelites-content');
+            log('ok', `${data.length} satélite(s) carregado(s)`);
+        } catch(e) { log('err', 'Erro ao carregar satélites', e); }
+    }
+
+    function renderSatelites(list, containerId) {
+        const el = document.getElementById(containerId);
+        if (!list.length) { el.innerHTML = '<div class="empty-state">Nenhum satélite encontrado</div>'; return; }
+        el.innerHTML = `<div class="cards">${list.map(s => `
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-name">🛰 ${s.nome}</span>
+                    ${badgeStatus(s.status)}
+                </div>
+                ${fuelBar(s.energia, 100)}
+                <div class="card-row"><span>Energia</span><span>${s.energia}%</span></div>
+                <div class="card-row"><span>Massa</span><span>${s.massaKg} kg</span></div>
+                <div class="card-row"><span>Tipo</span><span>${s.tipoSatelite}</span></div>
+                <div class="card-row"><span>Órbita</span><span>${s.orbitaAlvo || '—'}</span></div>
+                <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ Ativos' : '⬛ Fechados'}</span></div>
+            </div>`).join('')}</div>`;
+    }
+
+    async function criarSatelite() {
+        const nome     = document.getElementById('s-nome').value.trim();
+        const massaKg  = parseFloat(document.getElementById('s-massa').value);
+        const energia  = parseFloat(document.getElementById('s-energia').value);
+        const orbitaAlvo   = document.getElementById('s-orbita').value.trim();
+        const tipoSatelite = document.getElementById('s-tipo').value;
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('POST', '/satelites', { nome, massaKg, energia, orbitaAlvo, tipoSatelite });
+            log('ok', `Satélite "${data.nome}" criado!`, data);
+            document.getElementById('s-nome').value = '';
+        } catch(e) { log('err', e.mensagem || 'Erro ao criar satélite', e); }
+    }
+
+    async function ativarPaineis() {
+        const nome = document.getElementById('op-paineis-nome').value.trim();
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('PUT', `/satelites/${nome}/paineis`);
+            log('ok', `Painéis de ${nome} ativados! Energia: ${data.energia}`, data);
+        } catch(e) { log('err', e.mensagem || 'Erro', e); }
+    }
+
+    async function definirOrbita() {
+        const nome    = document.getElementById('op-orbita-nome').value.trim();
+        const escolha = document.getElementById('op-orbita-escolha').value;
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('PUT', `/satelites/${nome}/orbita`, { escolha });
+            log('ok', `Órbita de ${nome} definida: ${data.orbitaAlvo}`, data);
+        } catch(e) { log('err', e.mensagem || 'Erro', e); }
+    }
+
+    async function ativarSatelite() {
+        const nome = document.getElementById('op-ativar-nome').value.trim();
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('PUT', `/satelites/${nome}/ativar`);
+            log('ok', `Satélite ${nome} ATIVO!`, data);
+        } catch(e) { log('err', e.mensagem || 'Erro', e); }
+    }
+
+    // ---- Missão ----
+    async function iniciarMissao() {
+        const nomeFoguete  = document.getElementById('m-foguete').value.trim();
+        const nomeSatelite = document.getElementById('m-satelite').value.trim();
+        if (!nomeFoguete || !nomeSatelite) { log('err', 'Preencha foguete e satélite'); return; }
+        try {
+            const data = await call('POST', '/missoes/iniciar', { nomeFoguete, nomeSatelite });
+            const type = data.sucesso ? 'ok' : 'err';
+            log(type, data.mensagem, data);
+        } catch(e) { log('err', e.mensagem || 'Erro ao iniciar missão', e); }
+    }
+
+    // ---- Status ----
+    async function loadStatus() {
+        try {
+            const data = await call('GET', '/missoes/status');
+            const el = document.getElementById('status-content');
+            el.innerHTML = `
+                <h3 style="font-size:14px;color:#4a6080;margin-bottom:12px">🚀 Foguetes</h3>
+                <div class="cards" style="margin-bottom:20px">
+                    ${data.foguetes.map(f => `
+                    <div class="card">
+                        <div class="card-header"><span class="card-name">🚀 ${f.nome}</span>${badgeStatus(f.status)}</div>
+                        ${fuelBar(f.combustivelRestante)}
+                        <div class="card-row"><span>Combustível</span><span>${f.combustivelRestante} ton</span></div>
+                        <div class="card-row"><span>Carga máxima</span><span>${f.cargaMaxima} kg</span></div>
+                        <div class="card-row"><span>Satélite</span><span>${f.sateliteCarregado || '—'}</span></div>
+                    </div>`).join('')}
+                </div>
+                <h3 style="font-size:14px;color:#4a6080;margin-bottom:12px">🛰 Satélites</h3>
+                <div class="cards">
+                    ${data.satelites.map(s => `
+                    <div class="card">
+                        <div class="card-header"><span class="card-name">🛰 ${s.nome}</span>${badgeStatus(s.status)}</div>
+                        ${fuelBar(s.energia, 100)}
+                        <div class="card-row"><span>Energia</span><span>${s.energia}%</span></div>
+                        <div class="card-row"><span>Massa</span><span>${s.massaKg} kg</span></div>
+                        <div class="card-row"><span>Tipo</span><span>${s.tipoSatelite}</span></div>
+                        <div class="card-row"><span>Órbita</span><span>${s.orbitaAlvo || '—'}</span></div>
+                        <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ Ativos' : '⬛ Fechados'}</span></div>
+                    </div>`).join('')}
+                </div>
+            `;
+            log('ok', 'Status atualizado');
+        } catch(e) {
+            log('err', 'API offline — verifique se o Spring Boot está rodando', e);
+            document.getElementById('statusDot').style.background = '#ef4444';
+            document.getElementById('statusDot').style.boxShadow = '0 0 6px #ef4444';
+        }
+    }
+
+    async function enviarDados() {
+        const nome = document.getElementById('d-nome').value.trim();
+        if (!nome) { log('err', 'Nome é obrigatório'); return; }
+        try {
+            const data = await call('PUT', `/missoes/${nome}/dados`);
+            log('ok', `📡 ${data.satelite}: "${data.mensagem}" | Energia restante: ${data.energiaRestante}`, data);
+        } catch(e) { log('err', e.mensagem || 'Erro ao enviar dados', e); }
+    }
+
+    // Carrega status ao abrir
+    loadStatus();
+</script>
+</body>
+</html>
