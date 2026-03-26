@@ -66,7 +66,11 @@ public class SateliteService {
         return new DadosEnviadosResponse(satelite.getNome(), mensagem, satelite.getEnergia());
     }
 
-    // Método interno
+    public void deletar(String nome) {
+        Satelite satelite = buscarEntidade(nome);
+        sateliteRepository.delete(satelite);
+    }
+
     public Satelite buscarEntidade(String nome) {
         return sateliteRepository.findByNomeIgnoreCase(nome)
                 .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Satélite não encontrado: " + nome));

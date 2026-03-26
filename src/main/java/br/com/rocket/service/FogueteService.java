@@ -27,8 +27,7 @@ public class FogueteService {
     }
 
     public FogueteResponse buscarPorNome(String nome) {
-        Foguete foguete = buscarEntidade(nome);
-        return FogueteResponse.from(foguete);
+        return FogueteResponse.from(buscarEntidade(nome));
     }
 
     public FogueteResponse criar(CriarFogueteRequest request) {
@@ -45,7 +44,11 @@ public class FogueteService {
         return FogueteResponse.from(fogueteRepository.save(foguete));
     }
 
-    // Método interno usado pelo CentroControleService
+    public void deletar(String nome) {
+        Foguete foguete = buscarEntidade(nome);
+        fogueteRepository.delete(foguete);
+    }
+
     public Foguete buscarEntidade(String nome) {
         return fogueteRepository.findByNomeIgnoreCase(nome)
                 .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Foguete não encontrado: " + nome));

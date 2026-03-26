@@ -25,7 +25,7 @@ public class CentroControleService {
     private final SateliteRepository sateliteRepository;
 
     public CentroControleService(FogueteService fogueteService, SateliteService sateliteService,
-                                 FogueteRepository fogueteRepository, SateliteRepository sateliteRepository) {
+                                  FogueteRepository fogueteRepository, SateliteRepository sateliteRepository) {
         this.fogueteService = fogueteService;
         this.sateliteService = sateliteService;
         this.fogueteRepository = fogueteRepository;
@@ -43,11 +43,11 @@ public class CentroControleService {
         // Validação de carga (lógica idêntica ao original)
         if (satelite.getMassaKg() > foguete.getCargaMaxima()) {
             return new MissaoResponse(
-                    false,
-                    "Falha: O satélite " + satelite.getNome() + " é muito pesado para o foguete " + foguete.getNome() +
-                            ". Massa: " + satelite.getMassaKg() + " kg / Carga máxima: " + foguete.getCargaMaxima() + " kg",
-                    FogueteResponse.from(foguete),
-                    SateliteResponse.from(satelite)
+                false,
+                "Falha: O satélite " + satelite.getNome() + " é muito pesado para o foguete " + foguete.getNome() +
+                ". Massa: " + satelite.getMassaKg() + " kg / Carga máxima: " + foguete.getCargaMaxima() + " kg",
+                FogueteResponse.from(foguete),
+                SateliteResponse.from(satelite)
             );
         }
 
@@ -61,10 +61,10 @@ public class CentroControleService {
         sateliteRepository.save(satelite);
 
         return new MissaoResponse(
-                true,
-                "Missão iniciada com sucesso! " + foguete.getNome() + " lançado carregando " + satelite.getNome(),
-                FogueteResponse.from(foguete),
-                SateliteResponse.from(satelite)
+            true,
+            "Missão iniciada com sucesso! " + foguete.getNome() + " lançado carregando " + satelite.getNome(),
+            FogueteResponse.from(foguete),
+            SateliteResponse.from(satelite)
         );
     }
 

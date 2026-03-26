@@ -57,7 +57,7 @@ public class Foguete {
         if (this.combustivelRestante < 50) {
             this.status = "Falha";
             throw new IllegalStateException(
-                    nome + " sem combustível! (Mínimo: 50 ton, atual: " + combustivelRestante + ")"
+                nome + " sem combustível! (Mínimo: 50 ton, atual: " + combustivelRestante + ")"
             );
         }
         this.combustivelRestante -= 50;

@@ -43,8 +43,14 @@ class FogueteController {
 
     @PutMapping("/{nome}/abastecer")
     public FogueteResponse abastecer(@PathVariable String nome,
-                                     @Valid @RequestBody AbastecerFogueteRequest request) {
+                                      @Valid @RequestBody AbastecerFogueteRequest request) {
         return fogueteService.abastecer(nome, request);
+    }
+
+    @DeleteMapping("/{nome}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable String nome) {
+        fogueteService.deletar(nome);
     }
 }
 
@@ -86,7 +92,7 @@ class SateliteController {
 
     @PutMapping("/{nome}/orbita")
     public SateliteResponse definirOrbita(@PathVariable String nome,
-                                          @Valid @RequestBody DefinirOrbitaRequest request) {
+                                           @Valid @RequestBody DefinirOrbitaRequest request) {
         return sateliteService.definirOrbita(nome, request);
     }
 
@@ -94,10 +100,16 @@ class SateliteController {
     public SateliteResponse ativarSatelite(@PathVariable String nome) {
         return sateliteService.ativarSatelite(nome);
     }
+
+    @DeleteMapping("/{nome}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable String nome) {
+        sateliteService.deletar(nome);
+    }
 }
 
 // ============================================================
-// MISSAO CONTROLLER  (CentroControle da versão web)
+// MISSAO CONTROLLER
 // ============================================================
 
 @RestController
