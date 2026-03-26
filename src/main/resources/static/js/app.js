@@ -4,11 +4,11 @@ const API = 'http://localhost:8080/api';
 // NAVEGAÇÃO
 // ============================================================
 
-function showPage(id) {
+function showPage(id, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
-    event.currentTarget.classList.add('active');
+    if (el) el.classList.add('active');
 }
 
 // ============================================================
@@ -20,8 +20,9 @@ function log(type, title, data) {
     const now = new Date().toLocaleTimeString('pt-BR');
     const typeClass = type === 'ok' ? 'log-ok' : type === 'err' ? 'log-err' : 'log-info';
     const typeLabel = type === 'ok' ? 'OK' : type === 'err' ? 'ERRO' : 'INFO';
+    const entryClass = type === 'ok' ? 'ok-entry' : type === 'err' ? 'err-entry' : 'info-entry';
     const entry = document.createElement('div');
-    entry.className = 'log-entry';
+    entry.className = `log-entry ${entryClass}`;
     entry.innerHTML = `
         <div class="log-time">${now}</div>
         <span class="log-type ${typeClass}">${typeLabel}</span>
@@ -33,7 +34,7 @@ function log(type, title, data) {
 }
 
 function clearLog() {
-    document.getElementById('logBody').innerHTML = '<div class="empty-state">Log limpo.</div>';
+    document.getElementById('logBody').innerHTML = '<div class="empty-state">[ TERMINAL LIMPO ]</div>';
 }
 
 // ============================================================
@@ -64,17 +65,33 @@ function fuelBar(val, max = 150) {
     return `<div class="fuel-bar"><div class="fuel-fill" style="width:${pct}%"></div></div>`;
 }
 
+function atualizarStats(foguetes, satelites) {
+    document.getElementById('stat-foguetes').textContent = foguetes.length;
+    document.getElementById('stat-satelites').textContent = satelites.length;
+    const emOrbita = satelites.filter(s => s.status === 'Em órbita' || s.status === 'Ativo').length;
+    document.getElementById('stat-orbita').textContent = emOrbita;
+}
+
+function setOnline(online) {
+    const dot  = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    if (online) {
+        dot.className = 'status-dot';
+        text.textContent = 'ONLINE';
+    } else {
+        dot.className = 'status-dot offline';
+        text.textContent = 'OFFLINE';
+    }
+}
+
 // ============================================================
-// MODAL DE CONFIRMAÇÃO
+// MODAL
 // ============================================================
 
 function confirmarDelete(msg, callback) {
     document.getElementById('modalMsg').textContent = msg;
     document.getElementById('modalOverlay').classList.add('open');
-    document.getElementById('modalConfirm').onclick = () => {
-        fecharModal();
-        callback();
-    };
+    document.getElementById('modalConfirm').onclick = () => { fecharModal(); callback(); };
 }
 
 function fecharModal() {
@@ -90,12 +107,12 @@ async function loadFoguetes() {
         const data = await call('GET', '/foguetes');
         renderFoguetes(data, 'foguetes-content');
         log('ok', `${data.length} foguete(s) carregado(s)`);
-    } catch(e) { log('err', 'Erro ao carregar foguetes', e); }
+    } catch(e) { log('err', 'Falha ao carregar foguetes', e); }
 }
 
 function renderFoguetes(list, containerId) {
     const el = document.getElementById(containerId);
-    if (!list.length) { el.innerHTML = '<div class="empty-state">Nenhum foguete encontrado</div>'; return; }
+    if (!list.length) { el.innerHTML = '<div class="empty-state">[ NENHUM VETOR REGISTRADO ]</div>'; return; }
     el.innerHTML = `<div class="cards">${list.map(f => `
         <div class="card">
             <div class="card-header">
@@ -103,11 +120,11 @@ function renderFoguetes(list, containerId) {
                 ${badgeStatus(f.status)}
             </div>
             ${fuelBar(f.combustivelRestante)}
-            <div class="card-row"><span>Combustível</span><span>${f.combustivelRestante} ton</span></div>
-            <div class="card-row"><span>Carga máxima</span><span>${f.cargaMaxima} kg</span></div>
-            <div class="card-row"><span>Satélite</span><span>${f.sateliteCarregado || '—'}</span></div>
+            <div class="card-row"><span>Propelente</span><span>${f.combustivelRestante} ton</span></div>
+            <div class="card-row"><span>Carga máx.</span><span>${f.cargaMaxima} kg</span></div>
+            <div class="card-row"><span>Carga útil</span><span>${f.sateliteCarregado || '—'}</span></div>
             <div class="card-actions">
-                <button class="btn-delete" onclick="deletarFoguete('${f.nome}')">🗑 Deletar</button>
+                <button class="btn-delete" onclick="deletarFoguete('${f.nome}')">🗑 DELETAR</button>
             </div>
         </div>`).join('')}</div>`;
 }
@@ -116,31 +133,31 @@ async function criarFoguete() {
     const nome = document.getElementById('f-nome').value.trim();
     const cargaMaxima = parseFloat(document.getElementById('f-carga').value);
     const combustivelRestante = parseFloat(document.getElementById('f-comb').value);
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('POST', '/foguetes', { nome, cargaMaxima, combustivelRestante });
-        log('ok', `Foguete "${data.nome}" criado com sucesso!`, data);
+        log('ok', `Vetor "${data.nome}" registrado com sucesso`, data);
         document.getElementById('f-nome').value = '';
-    } catch(e) { log('err', e.mensagem || 'Erro ao criar foguete', e); }
+    } catch(e) { log('err', e.mensagem || 'Falha ao registrar foguete', e); }
 }
 
 async function abastecerFoguete() {
     const nome = document.getElementById('ab-nome').value.trim();
     const quantidade = parseFloat(document.getElementById('ab-qtd').value);
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('PUT', `/foguetes/${nome}/abastecer`, { quantidade });
-        log('ok', `${nome} abastecido! Combustível: ${data.combustivelRestante} ton`, data);
-    } catch(e) { log('err', e.mensagem || 'Erro ao abastecer', e); }
+        log('ok', `${nome} abastecido // Propelente: ${data.combustivelRestante} ton`, data);
+    } catch(e) { log('err', e.mensagem || 'Falha no abastecimento', e); }
 }
 
 async function deletarFoguete(nome) {
-    confirmarDelete(`Tem certeza que deseja deletar o foguete "${nome}"?`, async () => {
+    confirmarDelete(`Confirmar exclusão do vetor "${nome}" do sistema?`, async () => {
         try {
             await call('DELETE', `/foguetes/${encodeURIComponent(nome)}`);
-            log('ok', `Foguete "${nome}" deletado com sucesso!`);
+            log('ok', `Vetor "${nome}" removido do sistema`);
             loadFoguetes();
-        } catch(e) { log('err', e.mensagem || 'Erro ao deletar foguete', e); }
+        } catch(e) { log('err', e.mensagem || 'Falha ao remover foguete', e); }
     });
 }
 
@@ -153,12 +170,12 @@ async function loadSatelites() {
         const data = await call('GET', '/satelites');
         renderSatelites(data, 'satelites-content');
         log('ok', `${data.length} satélite(s) carregado(s)`);
-    } catch(e) { log('err', 'Erro ao carregar satélites', e); }
+    } catch(e) { log('err', 'Falha ao carregar satélites', e); }
 }
 
 function renderSatelites(list, containerId) {
     const el = document.getElementById(containerId);
-    if (!list.length) { el.innerHTML = '<div class="empty-state">Nenhum satélite encontrado</div>'; return; }
+    if (!list.length) { el.innerHTML = '<div class="empty-state">[ NENHUMA CARGA ÚTIL REGISTRADA ]</div>'; return; }
     el.innerHTML = `<div class="cards">${list.map(s => `
         <div class="card">
             <div class="card-header">
@@ -170,9 +187,9 @@ function renderSatelites(list, containerId) {
             <div class="card-row"><span>Massa</span><span>${s.massaKg} kg</span></div>
             <div class="card-row"><span>Tipo</span><span>${s.tipoSatelite}</span></div>
             <div class="card-row"><span>Órbita</span><span>${s.orbitaAlvo || '—'}</span></div>
-            <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ Ativos' : '⬛ Fechados'}</span></div>
+            <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ ATIVOS' : '■ FECHADOS'}</span></div>
             <div class="card-actions">
-                <button class="btn-delete" onclick="deletarSatelite('${s.nome}')">🗑 Deletar</button>
+                <button class="btn-delete" onclick="deletarSatelite('${s.nome}')">🗑 DELETAR</button>
             </div>
         </div>`).join('')}</div>`;
 }
@@ -183,49 +200,49 @@ async function criarSatelite() {
     const energia = parseFloat(document.getElementById('s-energia').value);
     const orbitaAlvo = document.getElementById('s-orbita').value.trim();
     const tipoSatelite = document.getElementById('s-tipo').value;
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('POST', '/satelites', { nome, massaKg, energia, orbitaAlvo, tipoSatelite });
-        log('ok', `Satélite "${data.nome}" criado!`, data);
+        log('ok', `Carga útil "${data.nome}" registrada com sucesso`, data);
         document.getElementById('s-nome').value = '';
-    } catch(e) { log('err', e.mensagem || 'Erro ao criar satélite', e); }
+    } catch(e) { log('err', e.mensagem || 'Falha ao registrar satélite', e); }
 }
 
 async function ativarPaineis() {
     const nome = document.getElementById('op-paineis-nome').value.trim();
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('PUT', `/satelites/${nome}/paineis`);
-        log('ok', `Painéis de ${nome} ativados! Energia: ${data.energia}`, data);
-    } catch(e) { log('err', e.mensagem || 'Erro', e); }
+        log('ok', `Painéis de ${nome} ativados // Energia: ${data.energia}%`, data);
+    } catch(e) { log('err', e.mensagem || 'Falha na ativação dos painéis', e); }
 }
 
 async function definirOrbita() {
     const nome = document.getElementById('op-orbita-nome').value.trim();
     const escolha = document.getElementById('op-orbita-escolha').value;
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('PUT', `/satelites/${nome}/orbita`, { escolha });
         log('ok', `Órbita de ${nome} definida: ${data.orbitaAlvo}`, data);
-    } catch(e) { log('err', e.mensagem || 'Erro', e); }
+    } catch(e) { log('err', e.mensagem || 'Falha na definição de órbita', e); }
 }
 
 async function ativarSatelite() {
     const nome = document.getElementById('op-ativar-nome').value.trim();
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('PUT', `/satelites/${nome}/ativar`);
-        log('ok', `Satélite ${nome} ATIVO!`, data);
-    } catch(e) { log('err', e.mensagem || 'Erro', e); }
+        log('ok', `Satélite ${nome} — STATUS: ATIVO`, data);
+    } catch(e) { log('err', e.mensagem || 'Falha na ativação', e); }
 }
 
 async function deletarSatelite(nome) {
-    confirmarDelete(`Tem certeza que deseja deletar o satélite "${nome}"?`, async () => {
+    confirmarDelete(`Confirmar exclusão da carga útil "${nome}" do sistema?`, async () => {
         try {
             await call('DELETE', `/satelites/${encodeURIComponent(nome)}`);
-            log('ok', `Satélite "${nome}" deletado com sucesso!`);
+            log('ok', `Carga útil "${nome}" removida do sistema`);
             loadSatelites();
-        } catch(e) { log('err', e.mensagem || 'Erro ao deletar satélite', e); }
+        } catch(e) { log('err', e.mensagem || 'Falha ao remover satélite', e); }
     });
 }
 
@@ -236,20 +253,21 @@ async function deletarSatelite(nome) {
 async function iniciarMissao() {
     const nomeFoguete = document.getElementById('m-foguete').value.trim();
     const nomeSatelite = document.getElementById('m-satelite').value.trim();
-    if (!nomeFoguete || !nomeSatelite) { log('err', 'Preencha foguete e satélite'); return; }
+    if (!nomeFoguete || !nomeSatelite) { log('err', 'Preencha vetor e carga útil'); return; }
     try {
         const data = await call('POST', '/missoes/iniciar', { nomeFoguete, nomeSatelite });
         log(data.sucesso ? 'ok' : 'err', data.mensagem, data);
-    } catch(e) { log('err', e.mensagem || 'Erro ao iniciar missão', e); }
+        if (data.sucesso) loadStatus();
+    } catch(e) { log('err', e.mensagem || 'Falha na sequência de lançamento', e); }
 }
 
 async function enviarDados() {
     const nome = document.getElementById('d-nome').value.trim();
-    if (!nome) { log('err', 'Nome é obrigatório'); return; }
+    if (!nome) { log('err', 'Designação é obrigatória'); return; }
     try {
         const data = await call('PUT', `/missoes/${nome}/dados`);
-        log('ok', `📡 ${data.satelite}: "${data.mensagem}" | Energia: ${data.energiaRestante}`, data);
-    } catch(e) { log('err', e.mensagem || 'Erro ao enviar dados', e); }
+        log('ok', `📡 TRANSMISSÃO // ${data.satelite}: "${data.mensagem}" // Energia: ${data.energiaRestante}%`, data);
+    } catch(e) { log('err', e.mensagem || 'Falha na transmissão', e); }
 }
 
 // ============================================================
@@ -259,23 +277,23 @@ async function enviarDados() {
 async function loadStatus() {
     try {
         const data = await call('GET', '/missoes/status');
-        const el = document.getElementById('status-content');
-        el.innerHTML = `
-            <h3 style="font-size:14px;color:#4a6080;margin-bottom:12px">🚀 Foguetes</h3>
+        atualizarStats(data.foguetes, data.satelites);
+        setOnline(true);
+
+        document.getElementById('status-content').innerHTML = `
+            <h3 style="font-family:'Orbitron',monospace;font-size:11px;color:rgba(0,180,255,.5);letter-spacing:.1em;margin-bottom:12px">◈ VETORES DE LANÇAMENTO</h3>
             <div class="cards" style="margin-bottom:20px">
                 ${data.foguetes.map(f => `
                 <div class="card">
                     <div class="card-header"><span class="card-name">🚀 ${f.nome}</span>${badgeStatus(f.status)}</div>
                     ${fuelBar(f.combustivelRestante)}
-                    <div class="card-row"><span>Combustível</span><span>${f.combustivelRestante} ton</span></div>
-                    <div class="card-row"><span>Carga máxima</span><span>${f.cargaMaxima} kg</span></div>
-                    <div class="card-row"><span>Satélite</span><span>${f.sateliteCarregado || '—'}</span></div>
-                    <div class="card-actions">
-                        <button class="btn-delete" onclick="deletarFoguete('${f.nome}')">🗑 Deletar</button>
-                    </div>
+                    <div class="card-row"><span>Propelente</span><span>${f.combustivelRestante} ton</span></div>
+                    <div class="card-row"><span>Carga máx.</span><span>${f.cargaMaxima} kg</span></div>
+                    <div class="card-row"><span>Carga útil</span><span>${f.sateliteCarregado || '—'}</span></div>
+                    <div class="card-actions"><button class="btn-delete" onclick="deletarFoguete('${f.nome}')">🗑 DELETAR</button></div>
                 </div>`).join('')}
             </div>
-            <h3 style="font-size:14px;color:#4a6080;margin-bottom:12px">🛰 Satélites</h3>
+            <h3 style="font-family:'Orbitron',monospace;font-size:11px;color:rgba(0,180,255,.5);letter-spacing:.1em;margin-bottom:12px">◈ CARGAS ÚTEIS</h3>
             <div class="cards">
                 ${data.satelites.map(s => `
                 <div class="card">
@@ -285,20 +303,17 @@ async function loadStatus() {
                     <div class="card-row"><span>Massa</span><span>${s.massaKg} kg</span></div>
                     <div class="card-row"><span>Tipo</span><span>${s.tipoSatelite}</span></div>
                     <div class="card-row"><span>Órbita</span><span>${s.orbitaAlvo || '—'}</span></div>
-                    <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ Ativos' : '⬛ Fechados'}</span></div>
-                    <div class="card-actions">
-                        <button class="btn-delete" onclick="deletarSatelite('${s.nome}')">🗑 Deletar</button>
-                    </div>
+                    <div class="card-row"><span>Painéis</span><span>${s.paineisAtivos ? '☀ ATIVOS' : '■ FECHADOS'}</span></div>
+                    <div class="card-actions"><button class="btn-delete" onclick="deletarSatelite('${s.nome}')">🗑 DELETAR</button></div>
                 </div>`).join('')}
-            </div>
-        `;
-        log('ok', 'Status atualizado');
+            </div>`;
+
+        log('info', `Sistema online // ${data.foguetes.length} vetores // ${data.satelites.length} cargas úteis`);
     } catch(e) {
-        log('err', 'API offline — verifique se o Spring Boot está rodando', e);
-        document.getElementById('statusDot').style.background = '#ef4444';
-        document.getElementById('statusDot').style.boxShadow = '0 0 6px #ef4444';
+        setOnline(false);
+        log('err', 'Falha de comunicação — API offline', e);
     }
 }
 
-// Carrega status ao abrir
+// Inicializa
 loadStatus();
