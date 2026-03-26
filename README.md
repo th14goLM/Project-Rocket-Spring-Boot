@@ -54,6 +54,7 @@ rocket2026/
 * Java 21 ☕
 * Spring Boot 3.2
 * HTML + CSS + JavaScript
+* PostgreSQL
 
 ---
 
