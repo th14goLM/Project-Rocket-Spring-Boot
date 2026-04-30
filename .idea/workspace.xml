@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9a18d47-0fea-4ffd-974a-7db13b9a9118" name="Changes" comment="29/04 - .env criado">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="c9a18d47-0fea-4ffd-974a-7db13b9a9118" name="Changes" comment="30/04 - Atualizações das dependencias (Swagger) e organização do restante">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,7 +88,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777515529229</updated>
-      <workItem from="1777546878534" duration="1620000" />
+      <workItem from="1777546878534" duration="1932000" />
     </task>
     <task id="LOCAL-00001" summary="29/04 - Mudança de banco de dados">
       <option name="closed" value="true" />
@@ -118,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777517766295</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="30/04 - Atualizações das dependencias (Swagger) e organização do restante">
+      <option name="closed" value="true" />
+      <created>1777548666294</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1777548666295</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,7 +143,8 @@
     <MESSAGE value="29/04 - Mudança de banco de dados" />
     <MESSAGE value="29/04 - Mudança na inicialização do banco de dados" />
     <MESSAGE value="29/04 - .env criado" />
-    <option name="LAST_COMMIT_MESSAGE" value="29/04 - .env criado" />
+    <MESSAGE value="30/04 - Atualizações das dependencias (Swagger) e organização do restante" />
+    <option name="LAST_COMMIT_MESSAGE" value="30/04 - Atualizações das dependencias (Swagger) e organização do restante" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
