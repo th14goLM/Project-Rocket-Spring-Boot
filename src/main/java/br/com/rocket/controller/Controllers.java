@@ -5,7 +5,6 @@ import br.com.rocket.dto.Responses.*;
 import br.com.rocket.service.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

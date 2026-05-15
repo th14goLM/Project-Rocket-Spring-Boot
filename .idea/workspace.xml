@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9a18d47-0fea-4ffd-974a-7db13b9a9118" name="Changes" comment="30/04 - Atualizações das dependencias (Swagger) e organização do restante">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/16a49874-1adf-4c74-a534-788d826c1758.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/16a49874-1adf-4c74-a534-788d826c1758.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/rocket/controller/Controllers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/rocket/controller/Controllers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/FogueteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/FogueteController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/MissaoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/MissaoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/SateliteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/rocket/controller/SateliteController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +35,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/th14goLM/Project-Rocket-Spring-Boot.git",
-    "accountId": "5fa915a8-3c5e-4b2a-85c2-42adf0cee57f"
+    "accountId": "3b2e5224-c5da-46c0-a815-8bf7167dbc73"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -51,8 +61,10 @@
     "Spring Boot.ProjectRocketApplication.executor": "Run",
     "Spring Boot.Unnamed.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -60,6 +72,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
